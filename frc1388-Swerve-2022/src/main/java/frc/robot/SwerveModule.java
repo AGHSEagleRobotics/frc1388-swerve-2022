@@ -10,6 +10,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
@@ -23,8 +24,10 @@ public class SwerveModule {
     private final double metersPerInch = 0.0254;
     private final double motorRotationsPerMeter = (wheelDistanceInInchesPerRotation * metersPerInch) / minPerSec * motorRotationsPerWheelRotation;
     private final double metersPerMotorRotation = 1 / motorRotationsPerMeter;
+
     private final WPI_TalonSRX m_rotationMotor;
     private final AnalogInput m_rotationEncoder;
+    private final PIDController m_rotationPidController;
 
     private final CANSparkMax m_driveMotor;
     private final RelativeEncoder m_driveEncoder;
@@ -44,6 +47,13 @@ public class SwerveModule {
         m_driveMotorPID.setI(0);
         m_driveMotorPID.setD(0);
 
+        // add values
+        m_rotationPidController = new PIDController(0, 0, 0);
+
+        m_rotationPidController.setTolerance(3);
+        m_rotationPidController.enableContinuousInput(0, 360);
+        m_rotationPidController.setIntegratorRange(-1, 1);
+
     }
 
     /** have fun 
@@ -55,8 +65,16 @@ public class SwerveModule {
         m_driveEncoder.getVelocity();
     }
 
-    public void setRotationPosition() {
+    /** sets rotation
+     * @param rotation is in degrees
+     */
+    public void setRotationPosition(double rotaiton) {
+        m_rotationMotor.set(m_rotationPidController.calculate(getRotationAngle() , rotaiton));
+    }
 
+    /** turns voltage from encoder to degrees */
+    private double getRotationAngle() {
+        return MathUtil.clamp((360 / (4.987 - 0.015)) * (m_rotationEncoder.getVoltage() - 0.015), 0, 360);
     }
 
 }
