@@ -12,4 +12,39 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+
+    public final class SwerveModuleConstants {
+        public static final int ROTATION_P = 1;
+        public static final int ROTATION_I = 0;
+        public static final int ROTATION_D = 0;
+        
+        public static final int DRIVE_P = 1;
+        public static final int DRIVE_I = 0;
+        public static final int DRIVE_D = 0;
+    }
+
+    public final class DriveTrainConstants {
+        // probaly won't use these:
+        // public double FRONT_RIGHT_ENCODER_OFSET = 0;
+        // public double FRONT_LEFT_ENCODER_OFSET =  0;
+        // public double BACK_LEFT_ENCODER_OFSET =   0;
+        // public double Back_RIGHT_ENCODER_OFSET =  0;
+
+        public static final int FRONT_RIGHT_ROTATION_MOTOR_ID = 1;
+        public static final int FRONT_RIGHT_ROTATION_ENCODER_ID = 0;
+        public static final int FRONT_RIGHT_DRIVE_ENCODER_ID = 9;
+        
+        public static final int FRONT_LEFT_ROTATION_MOTOR_ID = 2;
+        public static final int FRONT_LEFT_ROTATION_ENCODER_ID = 1;
+        public static final int FRONT_LEFT_DRIVE_ENCODER_ID = 10;
+        
+        public static final int BACK_LEFT_ROTATION_MOTOR_ID = 3;
+        public static final int BACK_LEFT_ROTATION_ENCODER_ID = 2;
+        public static final int BACK_LEFT_DRIVE_ENCODER_ID = 11;
+        
+        public static final int BACK_RIGHT_ROTATION_MOTOR_ID = 4;
+        public static final int BACK_RIGHT_ROTATION_ENCODER_ID = 3;
+        public static final int BACK_RIGHT_DRIVE_MOTOR_ID = 12;
+    }
+}

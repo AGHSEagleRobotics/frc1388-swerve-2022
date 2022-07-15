@@ -13,7 +13,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -33,6 +32,8 @@ public class SwerveModule {
     private final RelativeEncoder m_driveEncoder;
     private final SparkMaxPIDController m_driveMotorPID;
 
+    private double m_encoderOffset = 0;
+
     public SwerveModule(WPI_TalonSRX rotationMotor, AnalogInput rotationEncoder, CANSparkMax driveMotor) {
 
         m_rotationMotor = rotationMotor;
@@ -43,12 +44,12 @@ public class SwerveModule {
         m_driveEncoder = m_driveMotor.getEncoder();
         m_driveEncoder.setVelocityConversionFactor(12056156);
         m_driveMotorPID = m_driveMotor.getPIDController();
-        m_driveMotorPID.setP(1);
-        m_driveMotorPID.setI(0);
-        m_driveMotorPID.setD(0);
+        m_driveMotorPID.setP(Constants.SwerveModuleConstants.DRIVE_P);
+        m_driveMotorPID.setI(Constants.SwerveModuleConstants.DRIVE_I);
+        m_driveMotorPID.setD(Constants.SwerveModuleConstants.DRIVE_D);
 
         // add values
-        m_rotationPidController = new PIDController(0, 0, 0);
+        m_rotationPidController = new PIDController(Constants.SwerveModuleConstants.ROTATION_P, Constants.SwerveModuleConstants.ROTATION_I, Constants.SwerveModuleConstants.ROTATION_D);
 
         m_rotationPidController.setTolerance(3);
         m_rotationPidController.enableContinuousInput(0, 360);
@@ -56,11 +57,18 @@ public class SwerveModule {
 
     }
 
-    /** have fun 
-     * @param speed i dont know
-    */
+    public void setOffset(int offset) {
+        m_encoderOffset = offset;
+    }
+    public double getOffset() {
+        return m_encoderOffset;
+    }
+
+    /** Setting motion speed
+     * @param speed is in meter / second
+     */
     public void setDriveSpeed(double speed) {
-        speed *=metersPerMotorRotation;
+        speed *= metersPerMotorRotation;
         m_driveMotorPID.setReference(speed, CANSparkMax.ControlType.kVelocity);
         m_driveEncoder.getVelocity();
     }

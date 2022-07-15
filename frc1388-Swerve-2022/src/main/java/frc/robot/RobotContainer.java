@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,6 +29,32 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+
+  private final XboxController m_controller = new XboxController(0);
+
+  private final DriveTrain m_driveTrainSubsystem  = new DriveTrain(
+    new SwerveModule(
+      new WPI_TalonSRX(Constants.DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_ID), 
+      new AnalogInput(Constants.DriveTrainConstants.FRONT_RIGHT_ROTATION_ENCODER_ID), 
+      new CANSparkMax(Constants.DriveTrainConstants.FRONT_RIGHT_DRIVE_ENCODER_ID, MotorType.kBrushless)
+    ),
+    new SwerveModule(
+      new WPI_TalonSRX(Constants.DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_ID), 
+      new AnalogInput(Constants.DriveTrainConstants.FRONT_LEFT_ROTATION_ENCODER_ID), 
+      new CANSparkMax(Constants.DriveTrainConstants.FRONT_LEFT_DRIVE_ENCODER_ID, MotorType.kBrushless)
+    ),
+    new SwerveModule(
+      new WPI_TalonSRX(Constants.DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_ID), 
+      new AnalogInput(Constants.DriveTrainConstants.BACK_LEFT_ROTATION_ENCODER_ID), 
+      new CANSparkMax(Constants.DriveTrainConstants.BACK_LEFT_DRIVE_ENCODER_ID, MotorType.kBrushless)
+    ),
+    new SwerveModule(
+      new WPI_TalonSRX(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_ID), 
+      new AnalogInput(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_ENCODER_ID), 
+      new CANSparkMax(Constants.DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless)
+    )
+  );
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -34,7 +67,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    
+    new JoystickButton(m_controller, XboxController.Button.kA.value)
+    .whenPressed(()-> m_driveTrainSubsystem.testPrint(37));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
