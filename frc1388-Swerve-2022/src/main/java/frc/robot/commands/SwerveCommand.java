@@ -37,7 +37,11 @@ public class SwerveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    m_driveTrain.testPrint(m_leftX.get());
+
+    double xmps = m_leftX.get() * 3;
+    double ymps = m_leftY.get() * 3;
+    double rotation = m_rightX.get();
   }
 
   // Called once the command ends or is interrupted.

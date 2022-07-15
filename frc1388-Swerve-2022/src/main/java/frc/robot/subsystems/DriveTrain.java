@@ -29,7 +29,7 @@ public class DriveTrain extends SubsystemBase {
     System.out.println("**************************\ntest print\n\n\n\n");
   }
 
-  public void testPrint(int i) {
+  public void testPrint(double i) {
     System.out.println("**************************\ntest print\n\n\n\n");
   }
 

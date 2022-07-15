@@ -45,6 +45,6 @@ public final class Constants {
         
         public static final int BACK_RIGHT_ROTATION_MOTOR_ID = 4;
         public static final int BACK_RIGHT_ROTATION_ENCODER_ID = 3;
-        public static final int BACK_RIGHT_DRIVE_MOTOR_ID = 12;
+        public static final int BACK_RIGHT_DRIVE_ENCODER_ID = 12;
     }
 }
