@@ -51,7 +51,7 @@ public class RobotContainer {
     new SwerveModule(
       new WPI_TalonSRX(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_ID), 
       new AnalogInput(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_ENCODER_ID), 
-      new CANSparkMax(Constants.DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless)
+      new CANSparkMax(Constants.DriveTrainConstants.BACK_RIGHT_DRIVE_ENCODER_ID, MotorType.kBrushless)
     )
   );
 
@@ -68,9 +68,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
     new JoystickButton(m_controller, XboxController.Button.kA.value)
-    .whenPressed(()-> m_driveTrainSubsystem.testPrint(37));
+    .whenPressed(()-> m_driveTrainSubsystem.testPrint(32));
   }
 
   /**
