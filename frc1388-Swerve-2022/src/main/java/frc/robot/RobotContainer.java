@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SwerveCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,7 +31,7 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
 
-  private final XboxController m_controller = new XboxController(0);
+  private final XboxController m_driveController = new XboxController(0);
 
   private final DriveTrain m_driveTrainSubsystem  = new DriveTrain(
     new SwerveModule(
@@ -57,6 +58,14 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    m_driveTrainSubsystem.setDefaultCommand(new SwerveCommand(
+      m_driveTrainSubsystem,
+      () -> m_driveController.getLeftX(),
+      () -> m_driveController.getLeftY(),
+      () -> m_driveController.getRightX()
+    ));
+    
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -68,7 +77,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_controller, XboxController.Button.kA.value)
+    new JoystickButton(m_driveController, XboxController.Button.kA.value)
     .whenPressed(()-> m_driveTrainSubsystem.testPrint(32));
   }
 

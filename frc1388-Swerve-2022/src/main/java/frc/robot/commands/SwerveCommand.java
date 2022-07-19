@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
@@ -20,6 +21,7 @@ public class SwerveCommand extends CommandBase {
 
   /** Creates a new SwerveCommand. */
   public SwerveCommand(DriveTrain driveTrain, Supplier<Double> leftX, Supplier<Double> leftY, Supplier<Double> rightX) {
+
     m_driveTrain = driveTrain;
 
     m_leftX =  leftX;
@@ -28,7 +30,7 @@ public class SwerveCommand extends CommandBase {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
-  }
+  } // end constructer
 
   // Called when the command is initially scheduled.
   @Override
@@ -42,6 +44,8 @@ public class SwerveCommand extends CommandBase {
     double xmps = m_leftX.get() * 3;
     double ymps = m_leftY.get() * 3;
     double rotation = m_rightX.get();
+
+    m_driveTrain.move(new Vector2d(xmps, ymps), rotation);
   }
 
   // Called once the command ends or is interrupted.

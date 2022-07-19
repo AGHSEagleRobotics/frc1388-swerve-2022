@@ -12,10 +12,16 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 /** Add your docs here. */
 public class SwerveModule {
+
+    private SwerveModuleState m_swerveModuleState;
+    public double m_angle;
+    public double m_speed;
 
     private final double minPerSec = 60;
     private final double motorRotationsPerWheelRotation = 6.67;
@@ -35,6 +41,8 @@ public class SwerveModule {
     private double m_encoderOffset = 0;
 
     public SwerveModule(WPI_TalonSRX rotationMotor, AnalogInput rotationEncoder, CANSparkMax driveMotor) {
+
+        m_swerveModuleState = new SwerveModuleState();
 
         m_rotationMotor = rotationMotor;
         m_rotationEncoder = rotationEncoder;
@@ -71,6 +79,18 @@ public class SwerveModule {
         speed *= metersPerMotorRotation;
         m_driveMotorPID.setReference(speed, CANSparkMax.ControlType.kVelocity);
         m_driveEncoder.getVelocity();
+    }
+
+    public void setSwerveModuleState(SwerveModuleState possition) {
+        m_swerveModuleState = SwerveModuleState.optimize(possition, new Rotation2d(m_angle));
+        m_angle = m_swerveModuleState.angle.getDegrees();
+        m_speed = m_swerveModuleState.speedMetersPerSecond;
+    }
+    public void setAngle(double angle) {
+        m_angle = angle;
+    }
+    public double getAngel() {
+        return m_angle;
     }
 
     /** sets rotation
