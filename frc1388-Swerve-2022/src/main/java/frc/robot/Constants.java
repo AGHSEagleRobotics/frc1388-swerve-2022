@@ -15,13 +15,13 @@ package frc.robot;
 public final class Constants {
 
     public final class SwerveModuleConstants {
-        public static final int ROTATION_P = 1;
-        public static final int ROTATION_I = 0;
-        public static final int ROTATION_D = 0;
+        public static final double ROTATION_P = 1;
+        public static final double ROTATION_I = 0;
+        public static final double ROTATION_D = 0;
         
-        public static final int DRIVE_P = 1;
-        public static final int DRIVE_I = 0;
-        public static final int DRIVE_D = 0;
+        public static final double DRIVE_P = 0.01;
+        public static final double DRIVE_I = 0;
+        public static final double DRIVE_D = 0;
     }
 
     public final class DriveTrainConstants {

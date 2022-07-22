@@ -19,16 +19,15 @@ import edu.wpi.first.wpilibj.AnalogInput;
 /** Add your docs here. */
 public class SwerveModule {
 
-    private SwerveModuleState m_swerveModuleState;
     public double m_angle;
     public double m_speed;
 
-    private final double minPerSec = 60;
-    private final double motorRotationsPerWheelRotation = 6.67;
-    private final double wheelDistanceInInchesPerRotation = 4 * Math.PI;
+    private final double secPerMin = 60;
+    private final double motorRotationsPerWheelRotation = 6.67; // from AndyMark
+    private final double inchesPerWheelRotation = 4 * Math.PI;
     private final double metersPerInch = 0.0254;
-    private final double motorRotationsPerMeter = (wheelDistanceInInchesPerRotation * metersPerInch) / minPerSec * motorRotationsPerWheelRotation;
-    private final double metersPerMotorRotation = 1 / motorRotationsPerMeter;
+    private final double metersPerMotorRotation = (inchesPerWheelRotation * metersPerInch) / motorRotationsPerWheelRotation;
+    private final double metersPerSecondPerRPM = metersPerMotorRotation * secPerMin;
 
     private final WPI_TalonSRX m_rotationMotor;
     private final AnalogInput m_rotationEncoder;
@@ -42,15 +41,13 @@ public class SwerveModule {
 
     public SwerveModule(WPI_TalonSRX rotationMotor, AnalogInput rotationEncoder, CANSparkMax driveMotor) {
 
-        m_swerveModuleState = new SwerveModuleState();
-
         m_rotationMotor = rotationMotor;
         m_rotationEncoder = rotationEncoder;
 
         m_driveMotor = driveMotor;
         m_driveMotor.setIdleMode(IdleMode.kBrake);
         m_driveEncoder = m_driveMotor.getEncoder();
-        m_driveEncoder.setVelocityConversionFactor(12056156);
+        m_driveEncoder.setVelocityConversionFactor(metersPerSecondPerRPM);
         m_driveMotorPID = m_driveMotor.getPIDController();
         m_driveMotorPID.setP(Constants.SwerveModuleConstants.DRIVE_P);
         m_driveMotorPID.setI(Constants.SwerveModuleConstants.DRIVE_I);
@@ -65,6 +62,7 @@ public class SwerveModule {
 
     }
 
+    // offset
     public void setOffset(int offset) {
         m_encoderOffset = offset;
     }
@@ -72,28 +70,23 @@ public class SwerveModule {
         return m_encoderOffset;
     }
 
-    /** Setting motion speed
+    // motors
+    public void setSwerveModuleState(SwerveModuleState possition) {
+        SwerveModuleState swerveModuleState = SwerveModuleState.optimize(possition, new Rotation2d(m_angle));
+        m_angle = swerveModuleState.angle.getDegrees();
+        m_speed = swerveModuleState.speedMetersPerSecond;
+
+        setDriveSpeed(m_speed);
+        setRotationPosition(m_angle);
+    }
+        /** Setting motion speed
      * @param speed is in meter / second
      */
     public void setDriveSpeed(double speed) {
-        speed *= metersPerMotorRotation;
-        m_driveMotorPID.setReference(speed, CANSparkMax.ControlType.kVelocity);
-        m_driveEncoder.getVelocity();
+        m_driveMotorPID.setReference(speed / metersPerSecondPerRPM, CANSparkMax.ControlType.kVelocity);
+        // m_driveEncoder.getVelocity();
     }
-
-    public void setSwerveModuleState(SwerveModuleState possition) {
-        m_swerveModuleState = SwerveModuleState.optimize(possition, new Rotation2d(m_angle));
-        m_angle = m_swerveModuleState.angle.getDegrees();
-        m_speed = m_swerveModuleState.speedMetersPerSecond;
-    }
-    public void setAngle(double angle) {
-        m_angle = angle;
-    }
-    public double getAngel() {
-        return m_angle;
-    }
-
-    /** sets rotation
+        /** sets rotation
      * @param rotation is in degrees
      */
     public void setRotationPosition(double rotaiton) {
@@ -102,7 +95,6 @@ public class SwerveModule {
 
     /** turns voltage from encoder to degrees */
     private double getRotationAngle() {
-        return MathUtil.clamp((360 / (4.987 - 0.015)) * (m_rotationEncoder.getVoltage() - 0.015), 0, 360);
+        return m_encoderOffset + MathUtil.clamp((360 / (4.987 - 0.015)) * (m_rotationEncoder.getVoltage() - 0.015), 0, 360);
     }
-
 }

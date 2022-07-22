@@ -14,16 +14,27 @@ import frc.robot.SwerveModule;
 
 public class DriveTrain extends SubsystemBase {
   
+  private final double TRACK  =  1.26; // width from center of rotation of swerve module in meters
+  private final double WHEEL_BASE = 1; // length from center of rotation of swerve module in meters
+  
   private final SwerveModule m_frontRight;
   private final SwerveModule m_frontLeft;
   private final SwerveModule m_backLeft;
   private final SwerveModule m_backRight;
+
+  private final double CENTER_TO_TRACK = TRACK / 2;
+  private final double CENTER_TO_WHEEL_BASE = WHEEL_BASE / 2;
+  private final Translation2d m_frontRighTranslation2d = new Translation2d( CENTER_TO_WHEEL_BASE, -CENTER_TO_TRACK);
+  private final Translation2d m_frontLefTranslation2d  = new Translation2d( CENTER_TO_WHEEL_BASE,  CENTER_TO_TRACK);
+  private final Translation2d m_backLefTranslation2d   = new Translation2d(-CENTER_TO_WHEEL_BASE,  CENTER_TO_TRACK);
+  private final Translation2d m_backRighTranslation2d  = new Translation2d(-CENTER_TO_WHEEL_BASE, -CENTER_TO_TRACK);
   
+  // TODO use numerical index to map these guys 
   private final Translation2d[] m_swerveTranslation2ds = {
-    new Translation2d(5, 2),
-    new Translation2d(5, 2),
-    new Translation2d(5, 2),
-    new Translation2d(5, 2)
+    m_frontRighTranslation2d,
+    m_frontLefTranslation2d,
+    m_backLefTranslation2d,
+    m_backRighTranslation2d 
   };
   
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2ds);
@@ -54,10 +65,13 @@ public class DriveTrain extends SubsystemBase {
   //   // returns SwerveModuleStates[]
   //   var dsdfsadas = m_kinematics.toSwerveModuleStates(robotSpeeds );
   // }
-  public void setStates(SwerveModuleState... state) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(state, 2);
+  public void setStates(SwerveModuleState[] states) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, 3); // 3 m/s max speed
 
-    // TODO this method also needs to do other things I think
+    m_frontRight.setSwerveModuleState(states[0]);
+    m_frontLeft.setSwerveModuleState(states[1]);
+    m_backLeft.setSwerveModuleState(states[2]);
+    m_backRight.setSwerveModuleState(states[3]);
 
   }
 
@@ -77,18 +91,6 @@ public class DriveTrain extends SubsystemBase {
      * FIXME make m_speed and m_angle private
      * TODO maybe have no params for setDriveSpeed and setRotationPosition, insted use the fields in the class
      */
-
-    //XXX if testing comment this out
-    m_frontRight.setDriveSpeed(m_frontRight.m_speed);
-    m_frontLeft.setDriveSpeed(m_frontLeft.m_speed);
-    m_backLeft.setDriveSpeed(m_backLeft.m_speed);
-    m_backRight.setDriveSpeed(m_backRight .m_speed);
-
-    m_frontRight.setRotationPosition(m_frontRight.m_angle);
-    m_frontLeft.setRotationPosition(m_frontLeft.m_angle);
-    m_backLeft.setRotationPosition(m_backLeft.m_angle);
-    m_backRight.setRotationPosition(m_backRight.m_angle);
-
   }
   
 }

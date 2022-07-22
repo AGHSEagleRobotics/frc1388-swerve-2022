@@ -41,8 +41,8 @@ public class SwerveCommand extends CommandBase {
   public void execute() {
     m_driveTrain.testPrint(m_leftX.get());
 
-    double xmps = m_leftX.get() * 3;
-    double ymps = m_leftY.get() * 3;
+    double ymps = m_leftX.get() * 3;
+    double xmps = m_leftY.get() * -3;
     double rotation = m_rightX.get();
 
     m_driveTrain.move(new Vector2d(xmps, ymps), rotation);
@@ -50,7 +50,9 @@ public class SwerveCommand extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_driveTrain.move(new Vector2d(0, 0), 0);
+  }
 
   // Returns true when the command should end.
   @Override
