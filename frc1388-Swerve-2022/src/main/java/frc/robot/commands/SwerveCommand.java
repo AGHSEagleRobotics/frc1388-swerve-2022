@@ -43,7 +43,7 @@ public class SwerveCommand extends CommandBase {
 
     double ymps = m_leftX.get() * 3;
     double xmps = m_leftY.get() * -3;
-    double rotation = m_rightX.get();
+    double rotation = m_rightX.get() * -1;
 
     m_driveTrain.move(new Vector2d(xmps, ymps), rotation);
   }

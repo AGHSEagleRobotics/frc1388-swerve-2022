@@ -15,11 +15,11 @@ package frc.robot;
 public final class Constants {
 
     public final class SwerveModuleConstants {
-        public static final double ROTATION_P = 1;
+        public static final double ROTATION_P = 0.01;
         public static final double ROTATION_I = 0;
         public static final double ROTATION_D = 0;
-        
-        public static final double DRIVE_P = 0.01;
+
+        public static final double DRIVE_P = 0.005;
         public static final double DRIVE_I = 0;
         public static final double DRIVE_D = 0;
     }
@@ -33,18 +33,18 @@ public final class Constants {
 
         public static final int FRONT_RIGHT_ROTATION_MOTOR_ID = 1;
         public static final int FRONT_RIGHT_ROTATION_ENCODER_ID = 0;
-        public static final int FRONT_RIGHT_DRIVE_ENCODER_ID = 9;
+        public static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 5;
         
         public static final int FRONT_LEFT_ROTATION_MOTOR_ID = 2;
         public static final int FRONT_LEFT_ROTATION_ENCODER_ID = 1;
-        public static final int FRONT_LEFT_DRIVE_ENCODER_ID = 10;
+        public static final int FRONT_LEFT_DRIVE_ENCODER_ID = 6;
         
         public static final int BACK_LEFT_ROTATION_MOTOR_ID = 3;
         public static final int BACK_LEFT_ROTATION_ENCODER_ID = 2;
-        public static final int BACK_LEFT_DRIVE_ENCODER_ID = 11;
+        public static final int BACK_LEFT_DRIVE_MOTOR_ID = 7;
         
         public static final int BACK_RIGHT_ROTATION_MOTOR_ID = 4;
         public static final int BACK_RIGHT_ROTATION_ENCODER_ID = 3;
-        public static final int BACK_RIGHT_DRIVE_ENCODER_ID = 12;
+        public static final int BACK_RIGHT_DRIVE_MOTOR_ID = 8;
     }
 }

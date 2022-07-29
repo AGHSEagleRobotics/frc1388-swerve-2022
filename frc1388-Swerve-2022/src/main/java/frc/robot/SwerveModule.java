@@ -15,9 +15,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
-
+ 
 /** Add your docs here. */
-public class SwerveModule {
+public class SwerveModule{
 
     public double m_angle;
     public double m_speed;
@@ -47,7 +47,7 @@ public class SwerveModule {
         m_driveMotor = driveMotor;
         m_driveMotor.setIdleMode(IdleMode.kBrake);
         m_driveEncoder = m_driveMotor.getEncoder();
-        m_driveEncoder.setVelocityConversionFactor(metersPerSecondPerRPM);
+        // m_driveEncoder.setVelocityConversionFactor(metersPerSecondPerRPM);
         m_driveMotorPID = m_driveMotor.getPIDController();
         m_driveMotorPID.setP(Constants.SwerveModuleConstants.DRIVE_P);
         m_driveMotorPID.setI(Constants.SwerveModuleConstants.DRIVE_I);
@@ -83,7 +83,8 @@ public class SwerveModule {
      * @param speed is in meter / second
      */
     public void setDriveSpeed(double speed) {
-        m_driveMotorPID.setReference(speed / metersPerSecondPerRPM, CANSparkMax.ControlType.kVelocity);
+        System.out.println("Speed: " + speed + " RPM: " + speed * 100);
+        m_driveMotorPID.setReference(speed * 100, CANSparkMax.ControlType.kVelocity);
         // m_driveEncoder.getVelocity();
     }
         /** sets rotation

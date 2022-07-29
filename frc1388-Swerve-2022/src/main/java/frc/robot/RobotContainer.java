@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.SwerveCommand;
+import frc.robot.commands.SwerveTest;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
 
@@ -37,7 +36,7 @@ public class RobotContainer {
     new SwerveModule(
       new WPI_TalonSRX(Constants.DriveTrainConstants.FRONT_RIGHT_ROTATION_MOTOR_ID), 
       new AnalogInput(Constants.DriveTrainConstants.FRONT_RIGHT_ROTATION_ENCODER_ID), 
-      new CANSparkMax(Constants.DriveTrainConstants.FRONT_RIGHT_DRIVE_ENCODER_ID, MotorType.kBrushless)
+      new CANSparkMax(Constants.DriveTrainConstants.FRONT_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless)
     ),
     new SwerveModule(
       new WPI_TalonSRX(Constants.DriveTrainConstants.FRONT_LEFT_ROTATION_MOTOR_ID), 
@@ -47,25 +46,32 @@ public class RobotContainer {
     new SwerveModule(
       new WPI_TalonSRX(Constants.DriveTrainConstants.BACK_LEFT_ROTATION_MOTOR_ID), 
       new AnalogInput(Constants.DriveTrainConstants.BACK_LEFT_ROTATION_ENCODER_ID), 
-      new CANSparkMax(Constants.DriveTrainConstants.BACK_LEFT_DRIVE_ENCODER_ID, MotorType.kBrushless)
+      new CANSparkMax(Constants.DriveTrainConstants.BACK_LEFT_DRIVE_MOTOR_ID, MotorType.kBrushless)
     ),
     new SwerveModule(
       new WPI_TalonSRX(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_ID), 
       new AnalogInput(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_ENCODER_ID), 
-      new CANSparkMax(Constants.DriveTrainConstants.BACK_RIGHT_DRIVE_ENCODER_ID, MotorType.kBrushless)
+      new CANSparkMax(Constants.DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless)
     )
   );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    m_driveTrainSubsystem.setDefaultCommand(new SwerveCommand(
-      m_driveTrainSubsystem,
-      () -> m_driveController.getLeftX(),
-      () -> m_driveController.getLeftY(),
-      () -> m_driveController.getRightX()
-    ));
-    
+    // uncomment
+    // m_driveTrainSubsystem.setDefaultCommand(new SwerveCommand(
+    //   m_driveTrainSubsystem,
+    //   () -> m_driveController.getLeftX(),
+    //   () -> m_driveController.getLeftY(),
+    //   () -> m_driveController.getRightX()
+    // ));
+
+    m_driveTrainSubsystem.setDefaultCommand(
+      new SwerveTest(m_driveTrainSubsystem,
+      () -> m_driveController.getRightX(),
+      () -> m_driveController.getLeftY()
+      ));
+
     // Configure the button bindings
     configureButtonBindings();
   }

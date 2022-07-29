@@ -29,7 +29,7 @@ public class DriveTrain extends SubsystemBase {
   private final Translation2d m_backLefTranslation2d   = new Translation2d(-CENTER_TO_WHEEL_BASE,  CENTER_TO_TRACK);
   private final Translation2d m_backRighTranslation2d  = new Translation2d(-CENTER_TO_WHEEL_BASE, -CENTER_TO_TRACK);
   
-  // TODO use numerical index to map these guys 
+  // TODO use numerical index to map these guys
   private final Translation2d[] m_swerveTranslation2ds = {
     m_frontRighTranslation2d,
     m_frontLefTranslation2d,
@@ -38,6 +38,9 @@ public class DriveTrain extends SubsystemBase {
   };
   
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2ds);
+
+  // for testing
+  public enum Locations {frontRight, frontLeft, backLeft, backRight};
   
   /** Creates a new DriveTrain. */
   public DriveTrain(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight) {
@@ -46,7 +49,7 @@ public class DriveTrain extends SubsystemBase {
     m_backLeft =   backLeft;
     m_backRight =  backRight;
 
-    m_frontRight.setOffset(0);
+    m_frontRight.setOffset(90);
     m_frontLeft.setOffset(0);
     m_backLeft.setOffset(0);
     m_backRight.setOffset(0);
@@ -61,10 +64,7 @@ public class DriveTrain extends SubsystemBase {
   public void move(Vector2d velocity, double omega) {
     setStates(m_kinematics.toSwerveModuleStates(new ChassisSpeeds(velocity.x, velocity.y, omega)));
   }
-  // public void foo(ChassisSpeeds robotSpeeds) {
-  //   // returns SwerveModuleStates[]
-  //   var dsdfsadas = m_kinematics.toSwerveModuleStates(robotSpeeds );
-  // }
+
   public void setStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(states, 3); // 3 m/s max speed
 
@@ -72,25 +72,35 @@ public class DriveTrain extends SubsystemBase {
     m_frontLeft.setSwerveModuleState(states[1]);
     m_backLeft.setSwerveModuleState(states[2]);
     m_backRight.setSwerveModuleState(states[3]);
-
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // for testing pid
-    // TODO uncoment this for testing
-    // for (int i = 0; i < 100; i++) {
-    //   for (int j = 0; j < 150; j++) {
-    //     m_frontRight.setRotationPosition(i * 45);
-    //   }
-    // }
-
-    /*
-     * FIXME make m_speed and m_angle private
-     * TODO maybe have no params for setDriveSpeed and setRotationPosition, insted use the fields in the class
-     */
   }
+
+  // for testing
+  public void testModule(Locations module, double rotation, double speed) {
+    switch (module){
+      case frontRight: m_frontRight.setDriveSpeed(speed);
+      m_frontRight.setRotationPosition(rotation);
+      break;
+
+      case frontLeft:  m_frontLeft.setDriveSpeed(speed);
+      m_frontLeft.setRotationPosition(rotation);
+      break;
+
+      case backLeft: m_backLeft.setDriveSpeed(speed);
+      m_backLeft.setRotationPosition(rotation);
+      break;
+
+      case backRight:  m_backRight.setDriveSpeed(speed);
+      m_backRight.setRotationPosition(rotation);
+      break;
+
+      default: System.out.println("you broke it :(  ");
+    }
+  } //  end testing method
   
 }
