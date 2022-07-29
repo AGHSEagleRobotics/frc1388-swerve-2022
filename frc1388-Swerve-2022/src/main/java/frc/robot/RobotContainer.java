@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SwerveCommand;
 import frc.robot.commands.SwerveTest;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -59,18 +60,18 @@ public class RobotContainer {
   public RobotContainer() {
 
     // uncomment
-    // m_driveTrainSubsystem.setDefaultCommand(new SwerveCommand(
-    //   m_driveTrainSubsystem,
-    //   () -> m_driveController.getLeftX(),
-    //   () -> m_driveController.getLeftY(),
-    //   () -> m_driveController.getRightX()
-    // ));
+    m_driveTrainSubsystem.setDefaultCommand(new SwerveCommand(
+      m_driveTrainSubsystem,
+      () -> m_driveController.getLeftX(),
+      () -> m_driveController.getLeftY(),
+      () -> m_driveController.getRightX()
+    ));
 
-    m_driveTrainSubsystem.setDefaultCommand(
-      new SwerveTest(m_driveTrainSubsystem,
-      () -> m_driveController.getRightX(),
-      () -> m_driveController.getLeftY()
-      ));
+    // m_driveTrainSubsystem.setDefaultCommand(
+    //   new SwerveTest(m_driveTrainSubsystem,
+    //   () -> m_driveController.getRightX(),
+    //   () -> m_driveController.getLeftY()
+    //   ));
 
     // Configure the button bindings
     configureButtonBindings();

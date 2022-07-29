@@ -14,8 +14,8 @@ import frc.robot.SwerveModule;
 
 public class DriveTrain extends SubsystemBase {
   
-  private final double TRACK  =  1.26; // width from center of rotation of swerve module in meters
-  private final double WHEEL_BASE = 1; // length from center of rotation of swerve module in meters
+  private final double TRACK  =  0.5588; // width from center of rotation of swerve module in meters
+  private final double WHEEL_BASE = 0.5588; // length from center of rotation of swerve module in meters
   
   private final SwerveModule m_frontRight;
   private final SwerveModule m_frontLeft;
@@ -49,16 +49,14 @@ public class DriveTrain extends SubsystemBase {
     m_backLeft =   backLeft;
     m_backRight =  backRight;
 
-    m_frontRight.setOffset(90);
-    m_frontLeft.setOffset(0);
+    m_frontRight.setOffset(270);
+    m_frontLeft.setOffset(90);
     m_backLeft.setOffset(0);
-    m_backRight.setOffset(0);
+    m_backRight.setOffset(90);
 
-    System.out.println("**************************\ntest print\n\n\n\n");
   }
 
   public void testPrint(double i) {
-    System.out.println("**************************\ntest print\n\n\n\n");
   }
 
   public void move(Vector2d velocity, double omega) {
@@ -67,6 +65,8 @@ public class DriveTrain extends SubsystemBase {
 
   public void setStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(states, 3); // 3 m/s max speed
+
+    System.out.println(states[1].speedMetersPerSecond + "\t" + states[1].angle);
 
     m_frontRight.setSwerveModuleState(states[0]);
     m_frontLeft.setSwerveModuleState(states[1]);

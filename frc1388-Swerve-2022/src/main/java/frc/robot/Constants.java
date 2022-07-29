@@ -19,7 +19,7 @@ public final class Constants {
         public static final double ROTATION_I = 0;
         public static final double ROTATION_D = 0;
 
-        public static final double DRIVE_P = 0.005;
+        public static final double DRIVE_P = 0.001;
         public static final double DRIVE_I = 0;
         public static final double DRIVE_D = 0;
     }

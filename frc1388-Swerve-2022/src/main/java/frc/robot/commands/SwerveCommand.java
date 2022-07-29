@@ -41,9 +41,13 @@ public class SwerveCommand extends CommandBase {
   public void execute() {
     m_driveTrain.testPrint(m_leftX.get());
 
-    double ymps = m_leftX.get() * 3;
-    double xmps = m_leftY.get() * -3;
+    double ymps = m_leftX.get() * 1;
+    double xmps = m_leftY.get() * -1;
     double rotation = m_rightX.get() * -1;
+    
+    // double ymps = .1;
+    // double xmps = 0;
+    // double rotation = 0;
 
     m_driveTrain.move(new Vector2d(xmps, ymps), rotation);
   }
