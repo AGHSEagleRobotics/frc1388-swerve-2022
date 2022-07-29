@@ -23,11 +23,14 @@ public class SwerveModule{
     public double m_speed;
 
     private final double secPerMin = 60;
+    private final double metersPerInch = 0.0254;
     private final double motorRotationsPerWheelRotation = 6.67; // from AndyMark
     private final double inchesPerWheelRotation = 4 * Math.PI;
-    private final double metersPerInch = 0.0254;
-    private final double metersPerMotorRotation = (inchesPerWheelRotation * metersPerInch) / motorRotationsPerWheelRotation;
-    private final double metersPerSecondPerRPM = metersPerMotorRotation * secPerMin;
+
+    private final double wheelRPM = (1 / motorRotationsPerWheelRotation);
+    private final double wheelInchesPerMin = wheelRPM * inchesPerWheelRotation;
+    private final double wheelMetersPerMin = wheelInchesPerMin * metersPerInch;
+    private final double metersPerSecondPerRPM = wheelMetersPerMin / secPerMin;
 
     private final WPI_TalonSRX m_rotationMotor;
     private final AnalogInput m_rotationEncoder;
