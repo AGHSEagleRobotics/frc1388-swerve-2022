@@ -74,8 +74,9 @@ public class SwerveModule{
     }
 
     // motors
-    public void setSwerveModuleState(SwerveModuleState possition) {
-        SwerveModuleState swerveModuleState = SwerveModuleState.optimize(possition, new Rotation2d(m_angle));
+    public void setSwerveModuleState(SwerveModuleState inputState) {
+        Rotation2d rotation = new Rotation2d(Math.toRadians(getRotationAngle()));
+        SwerveModuleState swerveModuleState = SwerveModuleState.optimize(inputState, rotation);
         m_angle = swerveModuleState.angle.getDegrees();
         m_speed = swerveModuleState.speedMetersPerSecond;
 
@@ -97,7 +98,8 @@ public class SwerveModule{
     }
 
     /** turns voltage from encoder to degrees */
-    private double getRotationAngle() {
-        return m_encoderOffset + MathUtil.clamp((360 / (4.987 - 0.015)) * (m_rotationEncoder.getVoltage() - 0.015), 0, 360);
+    public double getRotationAngle() {
+        double angle = (360 / (4.987 - 0.015)) * (m_rotationEncoder.getVoltage() - 0.015) - m_encoderOffset;
+        return MathUtil.inputModulus(angle, 0, 360);
     }
 }

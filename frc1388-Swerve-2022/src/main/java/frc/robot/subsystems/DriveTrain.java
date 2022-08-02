@@ -49,10 +49,10 @@ public class DriveTrain extends SubsystemBase {
     m_backLeft =   backLeft;
     m_backRight =  backRight;
 
-    m_frontRight.setOffset(270);
-    m_frontLeft.setOffset(90);
-    m_backLeft.setOffset(0);
-    m_backRight.setOffset(90);
+    m_frontRight.setOffset(2);
+    m_frontLeft.setOffset(173);
+    m_backLeft.setOffset(270);
+    m_backRight.setOffset(185);
 
   }
 
@@ -64,9 +64,10 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void setStates(SwerveModuleState[] states) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, 3); // 3 m/s max speed
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, 0.5); // 3 m/s max speed
 
-    System.out.println(states[1].speedMetersPerSecond + "\t" + states[1].angle);
+    System.out.println(states[0].speedMetersPerSecond + "\t" + states[0].angle);
+    System.out.println(m_frontRight.getRotationAngle());
 
     m_frontRight.setSwerveModuleState(states[0]);
     m_frontLeft.setSwerveModuleState(states[1]);
@@ -77,30 +78,38 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    // System.out.println("front right " + m_frontRight.getRotationAngle());
+    // System.out.println("front left " + m_frontLeft.getRotationAngle());
+    // System.out.println("back left " + m_backLeft.getRotationAngle());
+    // System.out.println("back right " + m_backRight.getRotationAngle());
+   
   }
 
   // for testing
   public void testModule(Locations module, double rotation, double speed) {
-    switch (module){
-      case frontRight: m_frontRight.setDriveSpeed(speed);
+    // switc/h (module){
+      // case frontRight: 
+      m_frontRight.setDriveSpeed(speed);
       m_frontRight.setRotationPosition(rotation);
-      break;
+      // break;
 
-      case frontLeft:  m_frontLeft.setDriveSpeed(speed);
+      // case frontLeft:  
+      m_frontLeft.setDriveSpeed(speed);
       m_frontLeft.setRotationPosition(rotation);
-      break;
+      // break;
 
-      case backLeft: m_backLeft.setDriveSpeed(speed);
+      // case backLeft: 
+      m_backLeft.setDriveSpeed(speed);
       m_backLeft.setRotationPosition(rotation);
-      break;
+      // break;
 
-      case backRight:  m_backRight.setDriveSpeed(speed);
+      // case backRight: 
+     m_backRight.setDriveSpeed(speed);
       m_backRight.setRotationPosition(rotation);
-      break;
+      // break;
 
-      default: System.out.println("you broke it :(  ");
-    }
+      // default: System.out.println("you broke it :(  ");
+    // }
   } //  end testing method
   
 }

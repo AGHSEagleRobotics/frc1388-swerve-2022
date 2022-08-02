@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
@@ -41,9 +42,9 @@ public class SwerveCommand extends CommandBase {
   public void execute() {
     m_driveTrain.testPrint(m_leftX.get());
 
-    double ymps = m_leftX.get() * 1;
-    double xmps = m_leftY.get() * -1;
-    double rotation = m_rightX.get() * -1;
+    double ymps =     MathUtil.applyDeadband(m_leftX.get() * -.5, .2);
+    double xmps =     MathUtil.applyDeadband(m_leftY.get() * -.5, .2) ;
+    double rotation = MathUtil.applyDeadband( m_rightX.get() * -1, .2);
     
     // double ymps = .1;
     // double xmps = 0;
