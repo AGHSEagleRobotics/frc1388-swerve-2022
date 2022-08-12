@@ -83,7 +83,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driveController, XboxController.Button.kA.value)
-    .whenPressed(()-> m_driveTrainSubsystem.testPrint(32));
+    .whenPressed(()-> m_driveTrainSubsystem.resetGyro());
   }
 
   /**

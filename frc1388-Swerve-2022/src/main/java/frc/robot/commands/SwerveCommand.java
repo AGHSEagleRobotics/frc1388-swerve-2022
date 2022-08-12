@@ -40,7 +40,6 @@ public class SwerveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_driveTrain.testPrint(m_leftX.get());
 
     double ymps =     MathUtil.applyDeadband(m_leftX.get()  * -0.5, .1);
     double xmps =     MathUtil.applyDeadband(m_leftY.get()  * -0.5, .1);

@@ -66,7 +66,8 @@ public class DriveTrain extends SubsystemBase {
 
   }
 
-  public void testPrint(double i) {
+  public void resetGyro() {
+    m_gyro.reset();
   }
 
   public void move(Vector2d velocity, double omega) {
@@ -105,7 +106,7 @@ public class DriveTrain extends SubsystemBase {
     // System.out.println("back left " + m_backLeft.getRotationAngle());
     // System.out.println("back right " + m_backRight.getRotationAngle());
 
-    System.out.println("gyro in degrees: " + getGyroAngle());
+    System.out.println("gyro in degrees: " + Math.toDegrees(getGyroAngle()));
    
   }
 
@@ -141,7 +142,7 @@ public class DriveTrain extends SubsystemBase {
    * @return returns the angle in radians
    */
   private double getGyroAngle() {
-    return Math.toRadians(m_gyro.getAngle() + 180.0);
+    return Math.toRadians(m_gyro.getAngle());
   }
   
 }
