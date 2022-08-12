@@ -42,13 +42,9 @@ public class SwerveCommand extends CommandBase {
   public void execute() {
     m_driveTrain.testPrint(m_leftX.get());
 
-    double ymps =     MathUtil.applyDeadband(m_leftX.get() * -.5, .2);
-    double xmps =     MathUtil.applyDeadband(m_leftY.get() * -.5, .2) ;
-    double rotation = MathUtil.applyDeadband( m_rightX.get() * -1, .2);
-    
-    // double ymps = .1;
-    // double xmps = 0;
-    // double rotation = 0;
+    double ymps =     MathUtil.applyDeadband(m_leftX.get()  * -0.5, .1);
+    double xmps =     MathUtil.applyDeadband(m_leftY.get()  * -0.5, .1);
+    double rotation = MathUtil.applyDeadband(m_rightX.get() * -1,   .1);
 
     m_driveTrain.move(new Vector2d(xmps, ymps), rotation);
   }

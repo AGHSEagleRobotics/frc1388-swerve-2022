@@ -8,14 +8,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwerveCommand;
-import frc.robot.commands.SwerveTest;
+// import frc.robot.commands.SwerveTest;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -27,8 +26,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
 
   private final XboxController m_driveController = new XboxController(0);
@@ -53,7 +50,8 @@ public class RobotContainer {
       new WPI_TalonSRX(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_MOTOR_ID), 
       new AnalogInput(Constants.DriveTrainConstants.BACK_RIGHT_ROTATION_ENCODER_ID), 
       new CANSparkMax(Constants.DriveTrainConstants.BACK_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless)
-    )
+    ),
+    new ADIS16470_IMU()
   );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -89,12 +87,15 @@ public class RobotContainer {
   }
 
   /**
+   * RETURNS NULL!!!  
+   * 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    // return m_autoCommand;
+    return null;
   }
 }

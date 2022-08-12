@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -41,9 +44,11 @@ public class DriveTrain extends SubsystemBase {
 
   // for testing
   public enum Locations {frontRight, frontLeft, backLeft, backRight};
+
+  private final ADIS16470_IMU m_gyro;
   
   /** Creates a new DriveTrain. */
-  public DriveTrain(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight) {
+  public DriveTrain(SwerveModule frontRight, SwerveModule frontLeft, SwerveModule backLeft, SwerveModule backRight, ADIS16470_IMU gyro) {
     m_frontRight = frontRight;
     m_frontLeft =  frontLeft;
     m_backLeft =   backLeft;
@@ -54,16 +59,20 @@ public class DriveTrain extends SubsystemBase {
     m_backLeft.setOffset(270);
     m_backRight.setOffset(185);
 
+    m_gyro = gyro;
+    m_gyro.calibrate();
+    m_gyro.reset();
+    m_gyro.setYawAxis(IMUAxis.kX);
+
   }
 
   public void testPrint(double i) {
   }
 
   public void move(Vector2d velocity, double omega) {
-    setStates(m_kinematics.toSwerveModuleStates(new ChassisSpeeds(velocity.x, velocity.y, omega)));
-  }
-
-  public void setStates(SwerveModuleState[] states) {
+    // ChassisSpeeds speeds = new ChassisSpeeds(velocity.x, velocity.y, omega);
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(velocity.x, velocity.y, omega, new Rotation2d(getGyroAngle()));
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, 0.5); // 3 m/s max speed
 
     System.out.println(states[0].speedMetersPerSecond + "\t" + states[0].angle);
@@ -73,7 +82,20 @@ public class DriveTrain extends SubsystemBase {
     m_frontLeft.setSwerveModuleState(states[1]);
     m_backLeft.setSwerveModuleState(states[2]);
     m_backRight.setSwerveModuleState(states[3]);
+    // setStates(m_kinematics.toSwerveModuleStates(new ChassisSpeeds(velocity.x, velocity.y, omega)));
   }
+
+  // public void setStates(SwerveModuleState[] states) {
+  //   SwerveDriveKinematics.desaturateWheelSpeeds(states, 0.5); // 3 m/s max speed
+
+  //   System.out.println(states[0].speedMetersPerSecond + "\t" + states[0].angle);
+  //   System.out.println(m_frontRight.getRotationAngle());
+
+  //   m_frontRight.setSwerveModuleState(states[0]);
+  //   m_frontLeft.setSwerveModuleState(states[1]);
+  //   m_backLeft.setSwerveModuleState(states[2]);
+  //   m_backRight.setSwerveModuleState(states[3]);
+  // }
 
   @Override
   public void periodic() {
@@ -82,12 +104,14 @@ public class DriveTrain extends SubsystemBase {
     // System.out.println("front left " + m_frontLeft.getRotationAngle());
     // System.out.println("back left " + m_backLeft.getRotationAngle());
     // System.out.println("back right " + m_backRight.getRotationAngle());
+
+    System.out.println("gyro in degrees: " + getGyroAngle());
    
   }
 
   // for testing
   public void testModule(Locations module, double rotation, double speed) {
-    // switc/h (module){
+    // switch (module){
       // case frontRight: 
       m_frontRight.setDriveSpeed(speed);
       m_frontRight.setRotationPosition(rotation);
@@ -111,5 +135,13 @@ public class DriveTrain extends SubsystemBase {
       // default: System.out.println("you broke it :(  ");
     // }
   } //  end testing method
+
+  /**
+   * Gets the gyro angle
+   * @return returns the angle in radians
+   */
+  private double getGyroAngle() {
+    return Math.toRadians(m_gyro.getAngle() + 180.0);
+  }
   
 }
