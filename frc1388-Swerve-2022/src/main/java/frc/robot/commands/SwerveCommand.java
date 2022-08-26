@@ -48,22 +48,29 @@ public class SwerveCommand extends CommandBase {
 
     // remove for regular use
     double rightTrigger = m_rightTrigger.get();
+    rightTrigger = Math.pow(rightTrigger, 1.5) + 0.2;
     double theta = Math.atan2(lefty, leftx);
 
     // cubic scaling
     // leftx = leftx * leftx * leftx;
     // lefty = lefty * lefty * lefty;
-    // rightx = rightx * rightx * rightx;
+    rightx = rightx * rightx * rightx;
 
     // gas pedal (remove for regular use)
-    leftx = rightTrigger * Math.cos(theta);
-    lefty = rightTrigger * Math.sin(theta);
+    if ( MathUtil.applyDeadband(leftx , .1) == 0 && MathUtil.applyDeadband(lefty , .1) == 0) {
+      leftx = 0;
+      lefty = 0;
+    } else {
+      leftx = rightTrigger * Math.cos(theta);
+      lefty = rightTrigger * Math.sin(theta);
+    }
+
     System.out.println(rightTrigger);
 
     // max speed 3mps
-    double ymps =     -3 * MathUtil.applyDeadband(leftx , .1);
-    double xmps =     -3 * MathUtil.applyDeadband(lefty , .1);
-    double rotation = -2 * MathUtil.applyDeadband(rightx,   .1);
+    double ymps =     -0.5 * MathUtil.applyDeadband(leftx , .1);
+    double xmps =     -0.5 * MathUtil.applyDeadband(lefty , .1);
+    double rotation = -1 * MathUtil.applyDeadband(rightx,   .1);
 
     m_driveTrain.move(new Vector2d(xmps, ymps), rotation);
   }
