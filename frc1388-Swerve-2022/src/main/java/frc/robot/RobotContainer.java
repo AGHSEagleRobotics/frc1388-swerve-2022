@@ -62,7 +62,8 @@ public class RobotContainer {
       m_driveTrainSubsystem,
       () -> m_driveController.getLeftX(),
       () -> m_driveController.getLeftY(),
-      () -> m_driveController.getRightX()
+      () -> m_driveController.getRightX(),
+      () -> m_driveController.getRightTriggerAxis()
     ));
 
     // m_driveTrainSubsystem.setDefaultCommand(

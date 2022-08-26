@@ -74,10 +74,10 @@ public class DriveTrain extends SubsystemBase {
     // ChassisSpeeds speeds = new ChassisSpeeds(velocity.x, velocity.y, omega);
     ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(velocity.x, velocity.y, omega, new Rotation2d(getGyroAngle()));
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, 0.5); // 3 m/s max speed
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, 3.0); // 3 m/s max speed
 
-    System.out.println(states[0].speedMetersPerSecond + "\t" + states[0].angle);
-    System.out.println(m_frontRight.getRotationAngle());
+    // System.out.println(states[0].speedMetersPerSecond + "\t" + states[0].angle);
+    // System.out.println(m_frontRight.getRotationAngle());
 
     m_frontRight.setSwerveModuleState(states[0]);
     m_frontLeft.setSwerveModuleState(states[1]);
@@ -106,7 +106,7 @@ public class DriveTrain extends SubsystemBase {
     // System.out.println("back left " + m_backLeft.getRotationAngle());
     // System.out.println("back right " + m_backRight.getRotationAngle());
 
-    System.out.println("gyro in degrees: " + Math.toDegrees(getGyroAngle()));
+    // System.out.println("gyro in degrees: " + Math.toDegrees(getGyroAngle()));
    
   }
 

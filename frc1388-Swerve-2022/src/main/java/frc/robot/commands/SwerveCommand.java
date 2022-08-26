@@ -19,15 +19,17 @@ public class SwerveCommand extends CommandBase {
   private Supplier<Double> m_leftX;
   private Supplier<Double> m_leftY;
   private Supplier<Double> m_rightX;
+  private Supplier<Double> m_rightTrigger;
 
   /** Creates a new SwerveCommand. */
-  public SwerveCommand(DriveTrain driveTrain, Supplier<Double> leftX, Supplier<Double> leftY, Supplier<Double> rightX) {
+  public SwerveCommand(DriveTrain driveTrain, Supplier<Double> leftX, Supplier<Double> leftY, Supplier<Double> rightX, Supplier<Double> rightTrigger) {
 
     m_driveTrain = driveTrain;
 
     m_leftX =  leftX;
     m_leftY =  leftY;
     m_rightX = rightX;
+    m_rightTrigger = rightTrigger;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
@@ -40,10 +42,28 @@ public class SwerveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double leftx = m_leftX.get();
+    double lefty = m_leftY.get();
+    double rightx = m_rightX.get();
 
-    double ymps =     MathUtil.applyDeadband(m_leftX.get()  * -0.5, .1);
-    double xmps =     MathUtil.applyDeadband(m_leftY.get()  * -0.5, .1);
-    double rotation = MathUtil.applyDeadband(m_rightX.get() * -1,   .1);
+    // remove for regular use
+    double rightTrigger = m_rightTrigger.get();
+    double theta = Math.atan2(lefty, leftx);
+
+    // cubic scaling
+    // leftx = leftx * leftx * leftx;
+    // lefty = lefty * lefty * lefty;
+    // rightx = rightx * rightx * rightx;
+
+    // gas pedal (remove for regular use)
+    leftx = rightTrigger * Math.cos(theta);
+    lefty = rightTrigger * Math.sin(theta);
+    System.out.println(rightTrigger);
+
+    // max speed 3mps
+    double ymps =     -3 * MathUtil.applyDeadband(leftx , .1);
+    double xmps =     -3 * MathUtil.applyDeadband(lefty , .1);
+    double rotation = -2 * MathUtil.applyDeadband(rightx,   .1);
 
     m_driveTrain.move(new Vector2d(xmps, ymps), rotation);
   }
